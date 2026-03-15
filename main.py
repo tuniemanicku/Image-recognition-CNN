@@ -10,14 +10,14 @@ import time
 def load_labels(test=False):
     labels = {}
     if not test:
-        with open("labels.txt","r") as file:
+        with open(f"{TRAIN_PATH}_labels.txt","r") as file:
             label = file.readline()
             while label:
                 txt = label.split()
                 labels[txt[0]] = int(txt[1])-1
                 label = file.readline()
     else:
-        with open("test_labels.txt","r") as file:
+        with open(f"{TEST_PATH}_labels.txt","r") as file:
             label = file.readline()
             while label:
                 txt = label.split()
