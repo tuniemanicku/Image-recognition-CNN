@@ -3,24 +3,33 @@ import cv2
 import numpy as np
 from utils import *
 
-images = os.listdir(TEST_PATH)
+def label_folder(path="memes"):
+    images = os.listdir(path)
+    labels = {}
 
-labels = {}
+    for i, image in enumerate(images):
+        option = 0
+        while True:
+            im = cv2.imread(path+"/"+image)
+            im = cv2.resize(im, dsize=(512,512))
+            cv2.imshow(image, im)
+            key = cv2.waitKey(10)
+            if key == ord('1') or key == ord('2') or key == ord('3'):
+                cv2.destroyAllWindows()
+                option = key - ord('0')
+                break
 
-for i, image in enumerate(images):
-    option = 0
-    while True:
-        im = cv2.imread(TEST_PATH+"/"+image)
-        im = cv2.resize(im, dsize=(512,512))
-        cv2.imshow(image, im)
-        key = cv2.waitKey(10)
-        if key == ord('1') or key == ord('2') or key == ord('3'):
-            cv2.destroyAllWindows()
-            option = key - ord('0')
-            break
+        labels[image] = option
+        print(labels)
+    with open(path+"_labels.txt", "w") as of:
+        for image in labels:
+            of.write(image+" "+str(int(labels[image]))+"\n")
 
-    labels[image] = option
-    print(labels)
-with open("test_labels.txt", "w") as of:
-    for image in labels:
-        of.write(image+" "+str(int(labels[image]))+"\n")
+def main():
+    print("label train data: ")
+    label_folder(TRAIN_PATH)
+    print("label test data: ")
+    label_folder(TEST_PATH)
+
+if __name__ == "__main__":
+    main()
